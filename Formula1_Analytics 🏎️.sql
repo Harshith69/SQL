@@ -58,12 +58,20 @@ Select raceid, avg(fastestLapSpeed) as Topspeed from f1 where fastestLapSpeed !=
 -- Identify the drivers with the most points (highest position order)
 Select drivername, sum(points) as most_points from f1 group by drivername order by sum(points) desc limit(3);
 
--- 12. Find the driver with the fastest average lap time.
--- 13. Determine the constructor with the most race wins.
--- 14. Calculate the total time spent racing by each driver.
--- 15. Find the average position order for each constructor.
--- 16. Identify the race with the longest duration (highest time).
--- 17. Determine the driver with the highest average points per race.
--- 18. Find the constructor with the most consistent performance (lowest standard deviation of position order).
--- 19. Calculate the percentage of races where Lewis Hamilton participated.
--- 20. Determine the nationality with the highest number of represented drivers.
+-- Determine the constructor with the most race wins
+Select constructorname from f1 group by constructorname order by sum(points) desc limit(1);
+
+-- Calculate the total time spent racing by each driver
+Select drivername, Sum(milliseconds) as racing_time from f1 group by drivername order by sum(milliseconds) desc;
+
+-- Find the average position order for each constructor
+Select constructorname, ROUND(avg(positionorder)) from f1 group by constructorname order by avg(positionorder);
+
+-- Identify the race with the longest duration (highest time)
+Select raceid, max(times)from f1 group by raceid order by max(times) desc limit(1);
+
+-- Calculate the percentage of races where Lewis Hamilton participated
+Select Round((count(CASE WHEN drivername = 'Lewis Hamilton' then 1 end) * 100.0 / COUNT(*)),2) AS ParticipationPercentage FROM f1;
+
+-- Determine the nationality with the highest number of represented drivers
+Select drivernationality, Count(distinct(drivername)) as driverscount from f1 group by drivernationality order by Count(distinct(drivername)) desc limit(1);
