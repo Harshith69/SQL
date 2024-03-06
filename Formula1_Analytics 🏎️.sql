@@ -75,3 +75,12 @@ Select Round((count(CASE WHEN drivername = 'Lewis Hamilton' then 1 end) * 100.0 
 
 -- Determine the nationality with the highest number of represented drivers
 Select drivernationality, Count(distinct(drivername)) as driverscount from f1 group by drivernationality order by Count(distinct(drivername)) desc limit(1);
+
+-- Find the constructors with the highest percentage of podium finishes (top 3 positions) in races
+Select constructorname, round((count(case when rank in (1,2,3) then 1 end)*100 / count(*)),0) as podiumfinishpercentage from f1 group by constructorname order by podiumfinishpercentage desc limit(3);
+
+-- Find the constructor with the highest average points per race
+SELECT Constructorname, round(AVG(points)) as avg_points from F1 group by constructorname order by AVG(points) desc limit(1);
+
+-- Determine the driver with the highest percentage of fastest laps in races
+SELECT DriverName, COUNT(CASE WHEN fastestLap = 1 THEN 1 END) * 100.0 / COUNT(*) AS PercentageFastestLaps FROM RaceResults GROUP BY DriverName ORDER BY PercentageFastestLaps DESC LIMIT 1;
